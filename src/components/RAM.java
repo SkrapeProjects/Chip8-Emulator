@@ -1,0 +1,71 @@
+package components;
+
+import generals.Stack;
+
+public class RAM 
+{
+	public int[] gameMemory;
+	public int[][] screenData;
+	public Stack stack;
+	public int[] keyStates;
+	
+	public static final int[] FONT = 
+	{
+			0xF0, 0x90, 0x90, 0x90, 0xF0, // 0
+            0x20, 0x60, 0x20, 0x20, 0x70, // 1
+            0xF0, 0x10, 0xF0, 0x80, 0xF0, // 2
+            0xF0, 0x10, 0xF0, 0x10, 0xF0, // 3
+            0x90, 0x90, 0xF0, 0x10, 0x10, // 4
+            0xF0, 0x80, 0xF0, 0x10, 0xF0, // 5
+            0xF0, 0x80, 0xF0, 0x90, 0xF0, // 6
+            0xF0, 0x10, 0x20, 0x40, 0x50, // 7
+            0xF0, 0x90, 0xF0, 0x90, 0xF0, // 8
+            0xF0, 0x90, 0xF0, 0x10, 0xF0, // 9
+            0xF0, 0x90, 0xF0, 0x90, 0x90, // A
+            0xE0, 0x90, 0xE0, 0x90, 0xE0, // B
+            0xF0, 0x80, 0x80, 0x80, 0xF0, // C
+            0xE0, 0x90, 0x90, 0x90, 0xE0, // D
+            0xF0, 0x80, 0xF0, 0x80, 0xF0, // E
+            0xF0, 0x80, 0xF0, 0x80, 0x80  // F
+	};
+	
+	public void init()
+	{
+		stack = new Stack();
+		gameMemory = new int[0xFFF];
+		screenData = new int[32][64];
+		keyStates = new int[16];
+	}
+	
+	public void reset()
+	{
+		stack.clear();
+		
+		for (int i = 0; i < gameMemory.length; i ++) gameMemory[i] = 0;
+		
+		for (int i = 0; i < keyStates.length; i ++) keyStates[i] = 0;
+		
+		for (int x = 0; x < 64; x ++)
+		{
+			for (int y = 0; y < 32; y ++)
+			{
+				screenData[y][x] = 0;
+			}
+		}
+		
+		for (int i = 0; i < 80; i++) 
+		{
+			gameMemory[i] = FONT[i];
+		}
+	}
+	
+	public int getKeyPressed()
+	{
+		for (int i = 0; i < keyStates.length; i ++)
+		{
+			if (keyStates[i] > 0) return i; 
+		}
+		
+		return -1;
+	}
+}
